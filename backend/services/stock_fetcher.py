@@ -67,7 +67,8 @@ TICKER_SECTOR = {
 
 
 def get_tickers_for_sectors(sectors: Optional[list]) -> list:
-    if not sectors:
+    # Handle ["All"] or empty sectors - return all tickers
+    if not sectors or "All" in sectors:
         return ALL_TICKERS
     result = []
     for sector in sectors:
@@ -135,7 +136,7 @@ def apply_filters(stocks: list, filters: dict) -> list:
     f = filters  # shorthand
 
     def passes(s):
-        if f.get("sectors") and s["sector"] not in f["sectors"]:
+        if f.get("sectors") and "All" not in f["sectors"] and s["sector"] not in f["sectors"]:
             return False
         if f.get("max_pe") is not None:
             if not s["pe_ratio"] or s["pe_ratio"] <= 0 or s["pe_ratio"] > f["max_pe"]:
@@ -145,6 +146,9 @@ def apply_filters(stocks: list, filters: dict) -> list:
                 return False
         if f.get("min_roe") is not None:
             if not s["roe"] or s["roe"] < f["min_roe"]:
+                return False
+        if f.get("max_roe") is not None:
+            if not s["roe"] or s["roe"] > f["max_roe"]:
                 return False
         if f.get("max_debt_to_equity") is not None:
             if s["debt_to_equity"] is None or s["debt_to_equity"] > f["max_debt_to_equity"]:
@@ -169,4 +173,21 @@ def apply_filters(stocks: list, filters: dict) -> list:
                 return False
         return True
 
-    return [s for s in stocks if passes(s)]
+    # Filter stocks
+    filtered = [s for s in stocks if passes(s)]
+
+    # Apply sorting
+    sort_by = f.get("sort_by")
+    sort_order = f.get("sort_order", "desc")
+    
+    if sort_by:
+        reverse = (sort_order == "desc")
+        # Sort by the specified metric, putting None values at the end
+        filtered.sort(
+            key=lambda s: (s.get(sort_by) is None, s.get(sort_by) or 0),
+            reverse=reverse
+        )
+
+    # Apply limit
+    limit = f.get("limit", 10)
+    return filtered[:limit]

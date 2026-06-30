@@ -1,13 +1,13 @@
 import os
 import json
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-model = genai.GenerativeModel("gemini-2.5-flash")
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 SYSTEM_PROMPT = """
 You are a stock screening query parser for Indian equity markets (NSE/BSE).
@@ -45,14 +45,10 @@ Interpret examples:
 
 
 def parse_query(query: str) -> dict:
-    prompt = f"""
-{SYSTEM_PROMPT}
-
-User Query:
-{query}
-"""
-
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=f"{SYSTEM_PROMPT}\n\nUser Query: {query}"
+    )
 
     raw = response.text.strip()
 

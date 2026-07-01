@@ -97,7 +97,7 @@ function App() {
                     {stock.roe && (
                       <div className="metric">
                         <span className="metric-label">ROE</span>
-                        <span className="metric-value">{stock.roe.toFixed(2)}%</span>
+                        <span className="metric-value">{(stock.roe*100).toFixed(2)}%</span>
                       </div>
                     )}
                     {stock.market_cap && (

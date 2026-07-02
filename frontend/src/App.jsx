@@ -28,7 +28,7 @@ import {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const API_URL = "http://127.0.0.1:8000/api/screener/search";
+const API_URL = "https://ai-stock-screener-1wuz.onrender.com/api/screener/search";
 
 const SECTOR_COLORS = {
   Banking:    "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
@@ -60,7 +60,6 @@ const fmt = {
     v != null
       ? `₹${v.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
       : "—",
-  // ROE comes from backend as decimal (0.15 = 15%) — multiply by 100
   roe: (v) => (v != null ? `${(v * 100).toFixed(2)}%` : "—"),
   pct: (v) => (v != null ? `${(v * 100).toFixed(2)}%` : "—"),
   pe: (v) => (v != null ? v.toFixed(2) : "—"),
@@ -159,7 +158,6 @@ function StockCard({ stock, index, onSelect }) {
         )}
         onClick={() => onSelect(stock)}
       >
-        {/* Top gradient line — the one visual signature on each card */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
         <CardHeader className="pb-3">
@@ -183,7 +181,6 @@ function StockCard({ stock, index, onSelect }) {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* Price — hero number */}
           <div>
             <div className="text-2xl font-bold font-mono tracking-tight text-foreground">
               {fmt.price(stock.price)}
@@ -191,7 +188,6 @@ function StockCard({ stock, index, onSelect }) {
             <CardDescription className="text-xs mt-0.5">Current price (NSE)</CardDescription>
           </div>
 
-          {/* Three key metrics */}
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-0.5">
               <p className="text-xs text-muted-foreground flex items-center gap-1">
@@ -205,7 +201,6 @@ function StockCard({ stock, index, onSelect }) {
               <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Percent size={9} /> ROE
               </p>
-              {/* ROE multiplied by 100 here */}
               <p className={cn(
                 "text-sm font-mono font-medium",
                 roePositive ? "text-emerald-400" : "text-red-400"
@@ -223,7 +218,6 @@ function StockCard({ stock, index, onSelect }) {
             </div>
           </div>
 
-          {/* Revenue growth indicator */}
           {stock.revenue_growth != null && (
             <div className="flex items-center gap-1.5 text-xs">
               {growthPositive
@@ -236,7 +230,6 @@ function StockCard({ stock, index, onSelect }) {
             </div>
           )}
 
-          {/* Footer hint */}
           <div className="flex items-center justify-between pt-1 border-t border-border/30">
             <span className="text-xs text-muted-foreground/50">Tap for full details</span>
             <span className="text-xs font-mono text-muted-foreground/40">{stock.nse_symbol}</span>
@@ -259,7 +252,6 @@ function DetailDialog({ stock, open, onClose }) {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-md border-border/60 bg-background/95 backdrop-blur-xl">
-        {/* Accent line at top */}
         <div className="absolute inset-x-0 top-0 h-px rounded-t-lg bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
 
         <DialogHeader className="pb-2">
@@ -277,7 +269,6 @@ function DetailDialog({ stock, open, onClose }) {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Metrics list */}
         <div className="rounded-xl border border-border/50 bg-muted/20 px-4 py-1 mt-2">
           <MetricRow icon={BarChart3}   label="P/E Ratio (TTM)"   value={fmt.pe(stock.pe_ratio)} />
           <MetricRow icon={BarChart3}   label="Forward P/E"       value={fmt.pe(stock.forward_pe)} />
@@ -338,16 +329,16 @@ function DetailDialog({ stock, open, onClose }) {
 function ParsedFiltersBar({ filters }) {
   if (!filters) return null;
 
-const chips = [
-  filters.sectors?.length && filters.sectors[0] !== "All" && `Sector: ${filters.sectors.join(", ")}`,
-  filters.max_pe != null && `P/E ≤ ${filters.max_pe}`,
-  filters.min_pe != null && `P/E ≥ ${filters.min_pe}`,
-  filters.min_roe != null && `ROE ≥ ${(filters.min_roe * 100).toFixed(0)}%`,
-  filters.max_debt_to_equity != null && `D/E ≤ ${filters.max_debt_to_equity}`,
-  filters.min_revenue_growth != null && `Rev Growth ≥ ${(filters.min_revenue_growth * 100).toFixed(0)}%`,
-  filters.sort_by && `Sort: ${filters.sort_by} ${filters.sort_order === "asc" ? "↑" : "↓"}`,
-  filters.limit && `Limit: ${filters.limit}`,
-].filter(Boolean);
+  const chips = [
+    filters.sectors?.length && filters.sectors[0] !== "All" && `Sector: ${filters.sectors.join(", ")}`,
+    filters.max_pe != null && `P/E ≤ ${filters.max_pe}`,
+    filters.min_pe != null && `P/E ≥ ${filters.min_pe}`,
+    filters.min_roe != null && `ROE ≥ ${(filters.min_roe * 100).toFixed(0)}%`,
+    filters.max_debt_to_equity != null && `D/E ≤ ${filters.max_debt_to_equity}`,
+    filters.min_revenue_growth != null && `Rev Growth ≥ ${(filters.min_revenue_growth * 100).toFixed(0)}%`,
+    filters.sort_by && `Sort: ${filters.sort_by} ${filters.sort_order === "asc" ? "↑" : "↓"}`,
+    filters.limit && `Limit: ${filters.limit}`,
+  ].filter(Boolean);
 
   if (!chips.length) return null;
 
@@ -374,13 +365,13 @@ const chips = [
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [query, setQuery]               = useState("");
-  const [results, setResults]           = useState([]);
+  const [query, setQuery]                 = useState("");
+  const [results, setResults]             = useState([]);
   const [parsedFilters, setParsedFilters] = useState(null);
-  const [loading, setLoading]           = useState(false);
-  const [error, setError]               = useState(null);
+  const [loading, setLoading]             = useState(false);
+  const [error, setError]                 = useState(null);
   const [selectedStock, setSelectedStock] = useState(null);
-  const [hasSearched, setHasSearched]   = useState(false);
+  const [hasSearched, setHasSearched]     = useState(false);
 
   async function handleSearch(overrideQuery) {
     const q = (overrideQuery ?? query).trim();
@@ -408,7 +399,7 @@ export default function App() {
       setResults(data.results ?? []);
       setParsedFilters(data.parsed_filters ?? null);
     } catch (err) {
-      setError(err.message || "Something went wrong. Is the backend running on :8000?");
+      setError(err.message || "Something went wrong. Is the backend running?");
     } finally {
       setLoading(false);
     }
@@ -439,8 +430,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Ambient gradient orbs — purely decorative, pointer-events off */}
+    <div className="min-h-screen bg-background text-foreground dark">
       <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden>
         <div className="absolute -top-40 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl" />
         <div className="absolute top-1/3 -right-20 w-80 h-80 bg-violet-600/8 rounded-full blur-3xl" />
@@ -448,8 +438,6 @@ export default function App() {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-16 sm:px-6">
-
-        {/* ── Hero ── */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -463,7 +451,7 @@ export default function App() {
 
           <h1 className="text-5xl sm:text-6xl font-bold tracking-tight text-foreground mb-4">
             AI Stock{" "}
-            <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Screener
             </span>
           </h1>
@@ -473,7 +461,6 @@ export default function App() {
           </p>
         </motion.div>
 
-        {/* ── Search bar ── */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -519,7 +506,6 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Example query chips */}
           <AnimatePresence>
             {!hasSearched && (
               <motion.div
@@ -542,14 +528,12 @@ export default function App() {
           </AnimatePresence>
         </motion.div>
 
-        {/* ── Parsed filters bar ── */}
         {parsedFilters && !loading && (
           <div className="max-w-2xl mx-auto mb-5">
             <ParsedFiltersBar filters={parsedFilters} />
           </div>
         )}
 
-        {/* ── Error state ── */}
         <AnimatePresence>
           {error && (
             <motion.div
@@ -571,7 +555,6 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        {/* ── Loading skeletons ── */}
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -580,7 +563,6 @@ export default function App() {
           </div>
         )}
 
-        {/* ── Results ── */}
         <AnimatePresence mode="wait">
           {!loading && results.length > 0 && (
             <motion.div key="results">
@@ -610,7 +592,6 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* ── Empty state ── */}
           {!loading && hasSearched && results.length === 0 && !error && (
             <motion.div
               key="empty"
@@ -628,7 +609,6 @@ export default function App() {
         </AnimatePresence>
       </div>
 
-      {/* ── Detail dialog ── */}
       <DetailDialog
         stock={selectedStock}
         open={!!selectedStock}

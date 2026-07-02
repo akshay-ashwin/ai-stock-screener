@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "framer-motion": "^12.42.2",
+    "gsap": "^3.15.0"
+  }
+}

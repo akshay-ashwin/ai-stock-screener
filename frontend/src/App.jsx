@@ -383,7 +383,7 @@ export default function App() {
       setResults(data.results ?? []);
       setParsedFilters(data.parsed_filters ?? null);
     } catch (err) {
-      setError(err.message || "Something went wrong. Is the backend running?");
+      setError(err.message || "Something went wrong. Is the backend running on :8000?");
     } finally {
       setLoading(false);
     }

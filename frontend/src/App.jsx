@@ -26,6 +26,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
+// Line 28 - PRODUCTION URL
 const API_URL = "https://ai-stock-screener-1wuz.onrender.com/api/screener/search";
 
 const SECTOR_COLORS = {
@@ -383,7 +384,7 @@ export default function App() {
       setResults(data.results ?? []);
       setParsedFilters(data.parsed_filters ?? null);
     } catch (err) {
-      setError(err.message || "Something went wrong. Is the backend running on :8000?");
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }

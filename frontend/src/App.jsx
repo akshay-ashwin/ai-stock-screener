@@ -26,8 +26,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
 const API_URL = "https://ai-stock-screener-1wuz.onrender.com/api/screener/search";
 
 const SECTOR_COLORS = {
@@ -53,8 +51,6 @@ const EXAMPLE_QUERIES = [
   "worst ROE across all sectors",
 ];
 
-// ─── Formatters ───────────────────────────────────────────────────────────────
-
 const fmt = {
   price: (v) =>
     v != null
@@ -73,8 +69,6 @@ const fmt = {
   range: (lo, hi) =>
     lo && hi ? `₹${lo.toFixed(0)} – ₹${hi.toFixed(0)}` : "—",
 };
-
-// ─── Small reusables ──────────────────────────────────────────────────────────
 
 function SectorBadge({ sector }) {
   return (
@@ -105,8 +99,6 @@ function MetricRow({ icon: Icon, label, value, valueClass }) {
   );
 }
 
-// ─── Skeleton loader cards ────────────────────────────────────────────────────
-
 function SkeletonCard() {
   return (
     <Card className="border-border/50 bg-card/60">
@@ -134,8 +126,6 @@ function SkeletonCard() {
     </Card>
   );
 }
-
-// ─── Stock card ───────────────────────────────────────────────────────────────
 
 function StockCard({ stock, index, onSelect }) {
   const roePositive = stock.roe != null && stock.roe > 0;
@@ -240,8 +230,6 @@ function StockCard({ stock, index, onSelect }) {
   );
 }
 
-// ─── Detail Dialog ────────────────────────────────────────────────────────────
-
 function DetailDialog({ stock, open, onClose }) {
   if (!stock) return null;
 
@@ -324,8 +312,6 @@ function DetailDialog({ stock, open, onClose }) {
   );
 }
 
-// ─── Parsed filters bar ───────────────────────────────────────────────────────
-
 function ParsedFiltersBar({ filters }) {
   if (!filters) return null;
 
@@ -361,8 +347,6 @@ function ParsedFiltersBar({ filters }) {
     </motion.div>
   );
 }
-
-// ─── Main App ─────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [query, setQuery]                 = useState("");

@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog";
 
 // Line 28 - PRODUCTION URL
-const API_URL = "https://ai-stock-screener-1wuz.onrender.com/api/screener/search";
+const API_URL ="https://ai-stock-screener-1wuz.onrender.com/api/screener/search";
 
 const SECTOR_COLORS = {
   Banking:    "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
@@ -317,13 +317,13 @@ function ParsedFiltersBar({ filters }) {
   if (!filters) return null;
 
   const chips = [
-    filters.sectors?.length && filters.sectors[0] !== "All" && `Sector: ${filters.sectors.join(", ")}`,
+    filters.sectors?.length && filters.sectors[0] !=="All" && `Sector: ${filters.sectors.join(", ")}`,
     filters.max_pe != null && `P/E ≤ ${filters.max_pe}`,
     filters.min_pe != null && `P/E ≥ ${filters.min_pe}`,
     filters.min_roe != null && `ROE ≥ ${(filters.min_roe * 100).toFixed(0)}%`,
     filters.max_debt_to_equity != null && `D/E ≤ ${filters.max_debt_to_equity}`,
     filters.min_revenue_growth != null && `Rev Growth ≥ ${(filters.min_revenue_growth * 100).toFixed(0)}%`,
-    filters.sort_by && `Sort: ${filters.sort_by} ${filters.sort_order === "asc" ? "↑" : "↓"}`,
+    filters.sort_by && `Sort: ${filters.sort_by} ${filters.sort_order ==="asc" ? "↑" : "↓"}`,
     filters.limit && `Limit: ${filters.limit}`,
   ].filter(Boolean);
 
@@ -333,15 +333,13 @@ function ParsedFiltersBar({ filters }) {
     <motion.div
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-wrap items-center gap-2"
-    >
+      className="flex flex-wrap items-center gap-2">
       <span className="text-xs text-muted-foreground">AI parsed:</span>
       {chips.map((chip) => (
         <Badge
           key={chip}
           variant="outline"
-          className="text-xs bg-primary/10 text-primary border-primary/20 font-normal"
-        >
+          className="text-xs bg-primary/10 text-primary border-primary/20 font-normal">
           {chip}
         </Badge>
       ))}
@@ -391,8 +389,8 @@ export default function App() {
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") handleSearch();
-    if (e.key === "Escape") {
+    if (e.key ==="Enter") handleSearch();
+    if (e.key ==="Escape") {
       setQuery("");
       setResults([]);
       setParsedFilters(null);
@@ -427,8 +425,7 @@ export default function App() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-12"
-        >
+          className="text-center mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary/25 bg-primary/8 text-primary text-xs font-medium mb-6">
             <Zap size={10} className="fill-current" />
             Gemini AI · NSE Universe · 100+ stocks
@@ -450,8 +447,7 @@ export default function App() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-          className="mb-6"
-        >
+          className="mb-6">
           <div className="flex gap-2 max-w-2xl mx-auto">
             <div className="relative flex-1">
               <Search
@@ -471,8 +467,7 @@ export default function App() {
                 <button
                   onClick={clearSearch}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Clear search"
-                >
+                  aria-label="Clear search">
                   <X size={13} />
                 </button>
               )}
@@ -481,8 +476,7 @@ export default function App() {
             <Button
               onClick={() => handleSearch()}
               disabled={loading || !query.trim()}
-              className="h-11 px-5 gap-2 bg-primary hover:bg-primary/90"
-            >
+              className="h-11 px-5 gap-2 bg-primary hover:bg-primary/90">
               {loading
                 ? <Loader2 size={14} className="animate-spin" />
                 : <Search size={14} />
@@ -497,14 +491,12 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { delay: 0.3 } }}
                 exit={{ opacity: 0 }}
-                className="flex flex-wrap justify-center gap-2 mt-3"
-              >
+                className="flex flex-wrap justify-center gap-2 mt-3">
                 {EXAMPLE_QUERIES.map((q) => (
                   <button
                     key={q}
                     onClick={() => handleExampleClick(q)}
-                    className="text-xs px-3 py-1.5 rounded-full border border-border/50 bg-card/40 text-muted-foreground hover:text-foreground hover:border-border hover:bg-card/70 transition-all duration-150"
-                  >
+                    className="text-xs px-3 py-1.5 rounded-full border border-border/50 bg-card/40 text-muted-foreground hover:text-foreground hover:border-border hover:bg-card/70 transition-all duration-150">
                     {q}
                   </button>
                 ))}
@@ -525,8 +517,7 @@ export default function App() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="max-w-2xl mx-auto mb-6"
-            >
+              className="max-w-2xl mx-auto mb-6">
               <Card className="border-destructive/30 bg-destructive/8">
                 <CardContent className="pt-4 pb-4 flex items-start gap-3">
                   <AlertCircle size={15} className="text-destructive flex-shrink-0 mt-0.5" />
@@ -554,8 +545,7 @@ export default function App() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex items-center justify-between mb-4"
-              >
+                className="flex items-center justify-between mb-4">
                 <p className="text-sm text-muted-foreground">
                   {results.length} {results.length === 1 ? "stock" : "stocks"} found
                 </p>
@@ -582,8 +572,7 @@ export default function App() {
               key="empty"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-20"
-            >
+              className="text-center py-20">
               <div className="text-5xl mb-4">🔍</div>
               <p className="text-foreground font-medium mb-1">No stocks matched</p>
               <p className="text-muted-foreground text-sm">
